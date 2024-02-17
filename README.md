@@ -1,9 +1,8 @@
-# DAEN690 - GMU DAEN Capstone Project
- GMU DAEN Capstone Project
+# GMU DAEN690 Capstone Project
 
 ## Project Title:	EVALUATION OF MIGRATORY BIRD POPULATION AND HARVEST DATA
 
-**Organization**:	Department of the Interior, U.S. Fish and Wildlife Service, Division of Migratory Bird Management
+**Department of the Interior, U.S. Fish and Wildlife Service, Division of Migratory Bird Management**
 
 
 ### PROBLEM DESCRIPTION
@@ -16,5 +15,22 @@ Ideally, there would be a seamless flow of data from our game bird monitoring pr
 1.	Harvest estimates.
 2.	Population abundance estimates.
 3.	Example time-series file from one of the four Flyways (Excel).
-4.	Previous year's Data Book from the Pacific Flyway for reference (pdf).
+4.	Previous year's Data Book from the Pacific Flyway for reference (pdf).'
+
+### DIRECTORY STRUCTURE
+
+DAEN690/                                                   # project documents
+|-- Team Wild Ducks Final Presentation.pptx                # presentation
+|-- Team Wild Ducks Final Project Report.docx              # report
+Data/
+|-- FileLayout.csv                                         # data dictionary
+|-- WingData.csv                                           # raw data
+Analytics/
+|-- FlywayTables.py
+|-- FlywayTablesSample.ipynb   
+|-- AtlanticFlyawayDatabook.ipynb
+Tableau Visualizations/
+|-- ...
+README.md
+
 
