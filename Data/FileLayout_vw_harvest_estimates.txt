@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 vw_harvest_estimates.csv
 
 Abstract: Harvest and hunting activity estimates for migratory game birds in 49 states, 4 flyways, and US totals.  
@@ -30,3 +31,37 @@ Column Descriptions:
 	CI_bph:     Confidence interval associated with the estimate of bag per hunter, expressed as a percentage of the estimate of bag per hunter
 	Var_bph:     Estimate of variance associated with the estimate of bag per hunter
 	status:     The status of the harvest estimate. P = Preliminary status, meaning that the estimate was calculated during the regulatory cycle following the hunting season, but has not been finalized. F = Finalized status, meaning that the estimate as well as the data used to produce it have been rigorously reviewed for errors, and corrected where necessary. Due to the short time between hunting seasons and the harvest regulations-setting process, preliminary estimates are initially calculated using state sample frame estimates and hunter response data that have not been rigorously reviewed, because of the substantial time involved to complete the review process.
+=======
+vw_harvest_estimates.csv
+
+Abstract: Harvest and hunting activity estimates for migratory game birds in 49 states, 4 flyways, and US totals.  
+This dataset contains the estimated retrieved and unretrieved harvest, days hunted, number of active hunters, 
+and bag per hunter, along with confidence intervals (expressed as percent of the estimate) and variance, for 
+13 species or species groups of migratory game birds surveyed in the Migratory Bird Hunter Diary Survey 
+from 1999 to 2020, by state and management unit.  
+
+Column Descriptions:
+	sp_group_surveyed:     4-character code representing the survey instrument, i.e., the group of species represented on the survey form: WATF (waterfowl survey), which includes ducks, geese, sea ducks and brant; DOVE (dove and band-tailed pigeon survey), which includes mourning doves, white-winged doves, and band-tailed pigeons; AMWO (woodcock survey), which includes American woodcock; SCRG (snipe, coot, rail and gallinule survey, which includes Wilson’s snipe, American coot, rails, and gallinules); and CRAN (sandhill crane survey) which includes sandhill cranes.
+	sp_group_estimated:     Common name of species or species group for which harvest estimates are calculated. This includes the individual species: mourning dove, white-winged dove, band-tailed pigeon, American woodcock, sandhill crane, Wilson's snipe, and American coot; and species groups: ducks, geese, sea ducks, brant, rails, and gallinules.
+	season:     Year representing the beginning of the hunting season
+	mgmt_unit:     The management unit in which the state is located, which may differ depending upon the species. For waterfowl harvest estimates, the management units are defined as the flyways: AF = Atlantic Flyway, MF = Mississippi Flyway, CF = Central Flyway, PF = Pacific Flyway, AK = Alaska. For doves: EMU = eastern management unit, CMU = central management unit, WMU = western management unit. For band-tailed pigeons: FC = four corners states, PC = Pacific coast; for woodcock: EMR = eastern management region, CMR = central management region; US = continental United States (including Alaska)
+	survey_state:     2-character abbreviation for the state for which the harvest estimate is calculated. This includes 49 states (all but Hawaii), as well as flyway and US totals. AF = Atlantic Flyway, MF = Mississippi Flyway, CF = Central Flyway, and PF = Pacific Flyway, and US totals.
+	survey_state_code:     3-digit number,where the first digit represents the flyway (1 = Atlantic Flyway, 2 = Mississippi Flyway, 3 = Central Flyway, 4 = Pacific Flyway, 5 = Alaska) and the second and third digit represent the state code.
+	state_frame_size:     The total number of HIP registrations submitted to the USFWS by each state each year.
+	days_hunted:     Estimate of the total number of days hunters hunted that species or species group
+	CI_days_hunted:     Confidence interval associated with the estimate of days hunted, expressed as a percentage of the estimate of days hunted
+	Var_days_hunted:     Estimate of variance associated with the estimate of days hunted
+	retrieved:     Estimate of the number of birds shot and retrieved
+	CI_retrieved:     Confidence interval associated with the estimate of retrieved birds, expressed as a percentage of the estimate of retrieved birds
+	Var_retrieved:     Estimate of variance associated with the estimate of the number of retrieved birds
+	unretrieved:     Estimate of the number of birds that were knocked down within sight, but could not be retrieved
+	CI_unretrieved:     Confidence interval associated with the estimate of unretrieved birds, expressed as a percentage of the estimate of unretrieved birds
+	Var_unretrieved:     Estimate of variance associated with the estimate of the number of unretrieved birds
+	active_hunters:     Estimate of the number of active hunters (those who hunted that species or species group at least one day during the hunting season)
+	CI_active_hunters:     Confidence interval associated with the estimate of active hunters, expressed as a percentage of the estimate of active hunters
+	Var_active_hunters:     Estimate of variance associated with the estimate of active hunters
+	bag_per_hunter:     Estimate of the number of birds shot and retrieved per hunter
+	CI_bph:     Confidence interval associated with the estimate of bag per hunter, expressed as a percentage of the estimate of bag per hunter
+	Var_bph:     Estimate of variance associated with the estimate of bag per hunter
+	status:     The status of the harvest estimate. P = Preliminary status, meaning that the estimate was calculated during the regulatory cycle following the hunting season, but has not been finalized. F = Finalized status, meaning that the estimate as well as the data used to produce it have been rigorously reviewed for errors, and corrected where necessary. Due to the short time between hunting seasons and the harvest regulations-setting process, preliminary estimates are initially calculated using state sample frame estimates and hunter response data that have not been rigorously reviewed, because of the substantial time involved to complete the review process.
+>>>>>>> 53fad3232cb11aa9614343621b6cbf818ae92541
