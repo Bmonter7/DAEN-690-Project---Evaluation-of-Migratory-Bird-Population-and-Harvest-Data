@@ -250,10 +250,10 @@ def main(flyway, seasons, species_group, aggregate_on, filename):
         species_group = sdf['sp_group_estimated'].unique()
     
     print_info('Processed input parameters:')
-    print_info(flyway)
-    print_info(seasons)
-    print_info(species_group)
-    print_info('Aggregate On: '+ aggregate_on)
+    print_info('--Flyway='+str(flyway))
+    print_info('--Seasons='+str(seasons))
+    print_info('--Species Groups='+str(species_group))
+    print_info('--Aggregate On='+ aggregate_on)
 
     # Validating aggregate_on parameter value
     if aggregate_on.lower() not in ALLOWED_AGGREGATE_ON_COL:

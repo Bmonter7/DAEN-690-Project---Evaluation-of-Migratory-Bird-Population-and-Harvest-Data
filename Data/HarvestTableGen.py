@@ -375,11 +375,11 @@ def main(flyway, seasons, species_name, species_aou, filename):
     
 
     # Printing parsed input options
-    print_info('Parsed Input Options:')
-    print_info('Seasons='+str(seasons))
-    print_info('Flyway='+flyway)
-    print_info('Selected Species='+str(selected_species_list))
-    print_info('Selected Species Column='+str(selected_species_colname))
+    print_info('Processed input parameters:')
+    print_info('--Seasons='+str(seasons))
+    print_info('--Flyway='+flyway)
+    print_info('--Selected Species='+str(selected_species_list))
+    print_info('--Selected Species Column='+str(selected_species_colname))
 
     big_results = calc_harvest_tabledata_multiple_species(sdf, flyway, seasons[0], seasons[1], selected_species_list,  selected_species_colname)
 

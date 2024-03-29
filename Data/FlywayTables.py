@@ -4,19 +4,16 @@ from openpyxl.styles import Border, Side, Alignment, Font
 from openpyxl.styles import NamedStyle
 import pandas as pd
 from pandas import DataFrame
-
-# global styles
-style_table_title = NamedStyle(name="table_title")
-style_table_title.font = Font(bold=True)
-
+import sys
 
 
 def create_table_to_ws(workbook: Workbook, 
                  estimate_data_df: DataFrame, average_data_df: DataFrame, 
-                 asterisk_text_list: list[str],
+                 asterisk_text_list,
                  table_title: str,
                  sheet_name: str): 
     
+    print_info('Begin creating table for table [' + str(table_title) + '] on sheet ' + sheet_name)
     ws1 = workbook.create_sheet(sheet_name)
     
     #track starting row for the table in sheet
@@ -39,13 +36,10 @@ def create_table_to_ws(workbook: Workbook,
     estimate_data_df.iloc[:, 0] = estimate_data_df.iloc[:, 0].astype(str)
     average_data_df.iloc[:, 0] = average_data_df.iloc[:, 0].astype(str)
 
-    print('Table Width: ' + str(table_width))
-    
-    
     #add column headings. NB. these must be strings
     ws1.append([table_title])
     table_start += 1
-    set_row_style(ws1[1], style_table_title)
+    set_title_row_style(ws1[table_start])
 
     #merge title row
     ws1.merge_cells(start_row=1, start_column=1, end_row=1, end_column=table_width)
@@ -54,7 +48,7 @@ def create_table_to_ws(workbook: Workbook,
     table_start += 1
 
     #setting font and alignment for table header
-    for idx, cell in enumerate(ws1[2]):
+    for idx, cell in enumerate(ws1[table_start]):
         if (idx > 0):
             cell.alignment = Alignment(horizontal='right')
         cell.font = Font(bold=True)
@@ -62,7 +56,10 @@ def create_table_to_ws(workbook: Workbook,
     #adding estimate data to ws
     for row in estimate_data_df.to_numpy():
         ws1.append(row.tolist())
+        set_data_row_style(ws1[table_start+table_height])
         table_height += 1
+        
+
 
     
     
@@ -74,7 +71,9 @@ def create_table_to_ws(workbook: Workbook,
     #Add 'Average' data section
     for row in average_data_df.to_numpy():
         ws1.append(row.tolist())
+        set_data_row_style(ws1[table_start+table_height])
         table_height += 1
+        
     
 
     #set border for the entire table
@@ -86,7 +85,7 @@ def create_table_to_ws(workbook: Workbook,
     #set border for average section
     set_border_rows(ws1[table_avg_start-1:table_start+table_height-1]) 
 
-    print('Table Height: ' + str(table_height))
+    print_info('Table Created with Size='+str(table_width)+'x' + str(table_height))
 
     asterisk_start_row = table_start+table_height
     #setting the * section text
@@ -96,7 +95,7 @@ def create_table_to_ws(workbook: Workbook,
         ws1.cell(asterisk_start_row, 1).font = Font(size=10)
         asterisk_start_row += 1
 
-    print('Done creating table for table [' + table_title + '] on sheet ' + sheet_name)
+    print_info('Done creating Excel table for [' + table_title + '] on sheet ' + sheet_name)
 
 
 def _draw_border(row, pos_y, max_x, max_y):
@@ -137,10 +136,32 @@ def set_border_rows(rows, isOneRow=False):
         
     
 #set style on a single row
-def set_row_style(row, style):
+def set_title_row_style(row):
     for cell in row:
         cell.font = Font(bold=True)
 
+def set_data_row_style(row):
+    for idx, cell in enumerate(row):
+        try:
+            if (idx > 0 and int(cell.value) > 0):
+                cell.number_format = '#,###'
+        except:
+            continue
+            
+
+
+''' ########### FUNCTIONS: Printing Output ########### '''
+
+def print_info(output_str):
+    print("[INFO] " + str(output_str))
+
+def print_error(output_str):
+    print("[ERROR] " + str(output_str))
+
+def print_fatal_exit(output_str):
+    print("[FATAL] " + str(output_str))
+    print("[FATAL] Exiting now...")
+    sys.exit()
 
 
 
