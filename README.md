@@ -23,14 +23,16 @@ Ideally, there would be a seamless flow of data from our game bird monitoring pr
 DAEN690/                                                   # project documents
 |-- Team Wild Ducks Final Presentation.pptx                # presentation
 |-- Team Wild Ducks Final Project Report.docx              # report
+|-- Team Wild Ducks Final Status Report.pptx               # status report
 Data/
-|-- FileLayout.csv                                         # data dictionary
-|-- WingData.csv                                           # raw data
-Analytics/
-|-- FlywayTables.py
-|-- FlywayTablesSample.ipynb   
-|-- AtlanticFlyawayDatabook.ipynb
-Tableau Visualizations/
+|-- FlywayTables.py                                        # Excel table module
+|-- HarvestTableGen.py                                     # Harvest table generation script
+|-- HunterTableGen.py                                      # Hunter table generation script
+|-- + other data files...
+Products/                                                  # all final delierables to customer
+|-- Python Scripts/                                        # final script deliverables and executables
+|-- Visualizations/                                        # all final Tableau deliverables
+Working Visualizations/                                     
 |-- ...
 README.md
 ```
