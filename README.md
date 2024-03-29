@@ -19,6 +19,7 @@ Ideally, there would be a seamless flow of data from our game bird monitoring pr
 
 ### DIRECTORY STRUCTURE
 
+```
 DAEN690/                                                   # project documents
 |-- Team Wild Ducks Final Presentation.pptx                # presentation
 |-- Team Wild Ducks Final Project Report.docx              # report
@@ -32,5 +33,5 @@ Analytics/
 Tableau Visualizations/
 |-- ...
 README.md
-
+```
 
