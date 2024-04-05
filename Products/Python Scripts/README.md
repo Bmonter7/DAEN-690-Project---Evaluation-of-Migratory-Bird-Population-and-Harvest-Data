@@ -9,7 +9,7 @@ Perform the following steps to execute a script (`HarvestTableGen.exe` or `Hunte
 3. In console, change directory to the directory with the downloaded script executable.
 4. Execute the script by typing the name of the script along with valid arguments and options.
 
-### HarvestTableGen.exe
+### 1. Using HarvestTableGen.exe
 
 For usage instructions, execute the following command in console:
 
@@ -20,7 +20,7 @@ Usage intructions will be printed on screen with all available options.
 The path to the CSV harvest dataset must be passed in as an argument to the scripts.
 `HarvestTableGen.exe WingData.csv`
 
-Optional "options" follow the filename argument. Available options include:
+**Optional "options" follow the filename argument. Available options include:**
 1. `--help` - including this option will print the script usage instructions.
 2. `--flyway` - Name of the flyway. Options are `Atlantic Flyway, Mississipi Flyway, Central Flyway, Pacific Flyway`. E.g `--flyway="Pacific Flyway"`. Default is `Atlatnic Flyway`.
 3. `--season` - Season range to generate. Use the notation <START>:<END>. E.g. `--seaons="1999:2021"`. Default is ALL.
@@ -41,8 +41,22 @@ Generate harvest data tables for Atlantic Flyway for all seasons in the dataset 
 
 `HarvestTableGen.exe WingData.csv --flyway="Atlantic Flyway" --species_aou="Duck:(ABDU|AGWT|AMWI|COGO|BAGO),BBWD,STEI"`
 
+### 2. Using HunterTableGen.exe
 
+For usage instructions, execute the following command in console:
 
+`HunterTableGen.exe --help`
+
+Usage intructions will be printed on screen with all available options.
+
+The path to the CSV harvest dataset must be passed in as an argument to the scripts.
+`HunterTableGen.exe vw_hunter.csv`
+
+**Optional "options" follow the filename argument. Available options include:**
+1. `--help` - including this option will print the script usage instructions.
+2. `--flyway` - Name of the flyway. Options are AF, MF, CF, and PF. E.g `--flyway="CF". Default is AF.
+3. `--season` - Season range to generate. Use the notation <START>:<END>. E.g. `--seaons="1999:2021"`. Default is ALL.
+4. `--species_group` - A comma seperated list of species groups to generate tables. Possible values are `brant, ducks, geese, sea ducks`. E.g. `--species_group="brant,ducks,geese,sea ducks"`. Values are case sensitive. Default is ALL.'
 
 
 
