@@ -58,6 +58,12 @@ The path to the CSV harvest dataset must be passed in as an argument to the scri
 3. `--season` - Season range to generate. Use the notation <START>:<END>. E.g. `--seaons="1999:2021"`. Default is ALL.
 4. `--species_group` - A comma seperated list of species groups to generate tables. Possible values are `brant, ducks, geese, sea ducks`. E.g. `--species_group="brant,ducks,geese,sea ducks"`. Values are case sensitive. Default is ALL.'
 
+Generate hunter data tables for Pacific Flyway with seasons from 1999 to 2022 for each species group ducks, brant:
 
+`HarvestTableGen.exe WingData.csv --flyway="Pacific Flyway" --seasons="1999:2022" --species_group="ducks,brant"`
+
+Generate harvest data tables for Atlantic Flyway for all seasons in the dataset for all species groups, separately:
+
+`HarvestTableGen.exe WingData.csv --flyway="Atlantic Flyway"`
 
 
