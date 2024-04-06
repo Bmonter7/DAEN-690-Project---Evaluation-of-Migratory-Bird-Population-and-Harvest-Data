@@ -8,6 +8,7 @@ Perform the following steps to execute a script (`HarvestTableGen.exe` or `Hunte
 2. In Windows, search by typing `cmd` in the Windows search box and open the Windows Prompt console tool.
 3. In console, change directory to the directory with the downloaded script executable.
 4. Execute the script by typing the name of the script along with valid arguments and options.
+5. An Excel Workbook (XLSX) file is generated in the same directory. Each Excel tab corresponds to a species or group.
 
 ### 1. Using HarvestTableGen.exe
 
