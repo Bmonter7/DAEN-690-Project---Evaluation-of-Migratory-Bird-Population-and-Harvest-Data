@@ -4,7 +4,7 @@
 Both of these files can ran directly in a Windows prompt console as commands. Both of these script executables are equipped with a full documented ommandline interface.
 
 Perform the following steps to execute a script for `HarvestTableGen.exe` or `HunterTableGen.exe`):
-1. Download the script and save it to a local directory, such as in the `Documents` folder.
+1. Download the script (with `exe` extension) and save it to a local directory, such as in the `Documents` folder.
 2. In Windows, perform a search by typing `cmd` in the Windows search box and open the Windows Prompt console tool.
 3. In console, change directory to the Windows folder with the downloaded script executable file.
 4. Execute the script by typing the name of the script along with valid arguments and options.
