@@ -16,7 +16,10 @@ For usage instructions, execute the following command in console:
 
 `HarvestTableGen.exe --help`
 
-Usage intructions will be printed on screen with all available options.
+Script usage intructions will be printed on screen with all available options.
+![HarvestTableGen Console](/images/harvest_table_gen_console.png)
+
+
 
 The path to the CSV harvest dataset must be passed in as an argument to the scripts.
 `HarvestTableGen.exe WingData.csv`
@@ -49,6 +52,8 @@ For usage instructions, execute the following command in console:
 `HunterTableGen.exe --help`
 
 Script usage intructions will be printed on screen with all available options.
+![HunterTableGen Console](/images/hunter_table_gen_console.png)
+
 
 The path to the CSV harvest dataset must be passed in as an argument to the scripts.
 `HunterTableGen.exe vw_hunter.csv`
