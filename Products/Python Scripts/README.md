@@ -74,4 +74,8 @@ The path to the CSV harvest dataset must be passed in as an argument to the scri
 
 `HarvestTableGen.exe WingData.csv --flyway="Atlantic Flyway"`
 
+## Python (Py) Scripts
+
+The script ending with the extension `.py` are program scripts written in Python. These are the code scripts behind the executables `HarvestTableGen.exe` and `HunterTableGen.exe`. They are not needed to execute the `exe` executable files and only made available for reference and/or future code development work to extend current functionalities.
+
 
