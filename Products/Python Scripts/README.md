@@ -22,7 +22,7 @@ Script usage intructions will be printed on screen with all available options.
 
 
 The path to the CSV harvest dataset must be passed in as an argument to the scripts.
-`HarvestTableGen.exe WingData.csv`
+`.\HarvestTableGen.exe WingData.csv`
 
 **Optional "options" follow the filename argument. Available options include:**
 1. `--help` - including this option will print the script usage instructions.
@@ -56,7 +56,7 @@ Script usage intructions will be printed on screen with all available options.
 
 
 The path to the CSV harvest dataset must be passed in as an argument to the scripts.
-`HunterTableGen.exe vw_hunter.csv`
+`.\HunterTableGen.exe vw_hunter.csv`
 
 **Optional "options" follow the filename argument. Available options include:**
 1. `--help` - including this option will print the script usage instructions.
