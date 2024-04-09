@@ -84,7 +84,7 @@ def calc_tabledata_for_species_group(df, flyway, season_start, season_end, speci
 
     # Round the active_hunters to the nearest hundred for Atlantic Flyway
     # Apply rounding only if table_value does not equal bag_per_hunter
-    if aggregate_on != ' ':
+    if aggregate_on != 'bag_per_hunter':
         df_hunt[aggregate_on] = np.round(df_hunt[aggregate_on], -2)
     else: #hunting date
         # If table_value equals bag_per_hunter round to 1 decimal place
