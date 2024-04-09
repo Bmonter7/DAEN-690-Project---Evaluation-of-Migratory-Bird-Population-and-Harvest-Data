@@ -6,7 +6,8 @@ import FlywayTables
 from openpyxl import Workbook
 import pandas as pd
 import sys
-
+import warnings
+warnings.filterwarnings('ignore')
 
 ''' ########### FUNCTIONS: Printing Output ########### '''
 

@@ -13,6 +13,7 @@ def create_table_to_ws(workbook: Workbook,
                  table_title: str,
                  sheet_name: str): 
     
+    sheet_name = sheet_name.replace('/',' ')
     print_info('Begin creating table for table [' + str(table_title) + '] on sheet ' + sheet_name)
     ws1 = workbook.create_sheet(sheet_name)
     
