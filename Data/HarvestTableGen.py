@@ -6,7 +6,8 @@ import FlywayTables
 from openpyxl import Workbook
 import pandas as pd
 import sys
-
+import warnings
+warnings.filterwarnings('ignore')
 
 
 ''' ########### FUNCTIONS: Parsing and Validating User Inputs ###########'''
@@ -279,6 +280,7 @@ def generate_excel_workbook_for_multiple_species(table_data_results_list):
         
 
         table_title = 'Estimates of '+species_name+' Harvest in the '+flyway
+        species_name = species_name.replace('/',' ')
         FlywayTables.create_table_to_ws(wb, harvest_estimate_data, period_averages, asterisk_text_list, table_title, species_name)
             
         workbook_name = flyway+' Tables.xlsx'

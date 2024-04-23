@@ -4,7 +4,7 @@
 Both of these files can ran directly in a Windows prompt console as commands. Both of these script executables are equipped with a full documented ommandline interface.
 
 Perform the following steps to execute a script for `HarvestTableGen.exe` or `HunterTableGen.exe`):
-1. Download the script and save it to a local directory, such as in the `Documents` folder.
+1. Download the script (with `exe` extension) and save it to a local directory, such as in the `Documents` folder.
 2. In Windows, perform a search by typing `cmd` in the Windows search box and open the Windows Prompt console tool.
 3. In console, change directory to the Windows folder with the downloaded script executable file.
 4. Execute the script by typing the name of the script along with valid arguments and options.
@@ -22,7 +22,7 @@ Script usage intructions will be printed on screen with all available options.
 
 
 The path to the CSV harvest dataset must be passed in as an argument to the scripts.
-`HarvestTableGen.exe WingData.csv`
+`.\HarvestTableGen.exe WingData.csv`
 
 **Optional "options" follow the filename argument. Available options include:**
 1. `--help` - including this option will print the script usage instructions.
@@ -56,7 +56,7 @@ Script usage intructions will be printed on screen with all available options.
 
 
 The path to the CSV harvest dataset must be passed in as an argument to the scripts.
-`HunterTableGen.exe vw_hunter.csv`
+`.\HunterTableGen.exe vw_hunter.csv`
 
 **Optional "options" follow the filename argument. Available options include:**
 1. `--help` - including this option will print the script usage instructions.
@@ -73,5 +73,9 @@ The path to the CSV harvest dataset must be passed in as an argument to the scri
 2. Generate harvest data tables for Atlantic Flyway for all seasons in the dataset for all species groups, separately:
 
 `HarvestTableGen.exe WingData.csv --flyway="Atlantic Flyway"`
+
+## Python (Py) Scripts
+
+The script ending with the extension `.py` are program scripts written in Python. These are the code scripts behind the executables `HarvestTableGen.exe` and `HunterTableGen.exe`. They are not needed to execute the `exe` executable files and only made available for reference and/or future code development work to extend current functionalities.
 
 
