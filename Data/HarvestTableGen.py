@@ -6,9 +6,8 @@ import FlywayTables
 from openpyxl import Workbook
 import pandas as pd
 import sys
-import warnings
-warnings.filterwarnings('ignore')
 
+## Working code with verified totals
 
 ''' ########### FUNCTIONS: Parsing and Validating User Inputs ###########'''
 
@@ -75,9 +74,9 @@ def aou_to_species_name(species_aou, mapping_dict):
     """
     Convert a list of AOU codes to species names using aou_to_name_dict .
     
-    :param species_aou: List of AOU codes or a single AOU code.
-    :param mapping_dict: A dictionary mapping AOU codes to species names.
-    :return: List of species names or a single species name.
+    parameter species_aou: List of AOU codes or a single AOU code.
+    parameter mapping_dict: A dictionary mapping AOU codes to species names.
+    returns List of species names or a single species name.
     """
     # Handling both single codes and lists of codes
     if isinstance(species_aou, list):
@@ -101,29 +100,50 @@ def add_new_col_groups(df, selected_species_groups_n_species, selected_species_c
     
 
 # Sum harvest weights by flyway for the species
-def aggregate_harvest_by_flyway(df, flyway, season_start, season_end, species_or_group, selected_species_colname):
+def aggregate_harvest_by_flyway(df, season_start, season_end, species_or_group, selected_species_colname):
     ''' Sum harvest weights by flyway for a species or group of species. '''
-    flyway_df = df[
-        (df['flyway_name'] == flyway) &
+    agg_df = df[
         (df['Season'] >= season_start) &
         (df['Season'] <= season_end)
     ]
     if (species_or_group and species_or_group.startswith('is_')):
-        flyway_df = flyway_df[flyway_df[species_or_group] == 1]
+        agg_df = agg_df[agg_df[species_or_group] == 1]
     else:
-        flyway_df = flyway_df[flyway_df[selected_species_colname] == species_or_group]
+        agg_df = agg_df[agg_df[selected_species_colname] == species_or_group]
 
-    flyway_df['harvest_weight'] = np.round(flyway_df['harvest_weight'], -2)
-    yearly_sum = flyway_df.groupby('Season')['harvest_weight'].sum().astype(int)
+    # Create a pivot table to sum harvest weights by flyway and season
+    pivot_df = agg_df.pivot_table(
+        values='harvest_weight',        # The data that needs to be aggregated
+        index='Season',                 # Rows (here grouped by 'Season')
+        columns='flyway_name',          # Columns will be created for each flyway
+        aggfunc='sum',                  # Define the aggregation function
+        fill_value=0                    # Fill missing values with 0
+    ).astype(int)
 
-    return yearly_sum
+    # Round to the nearest hundred
+    pivot_df = pivot_df.applymap(lambda x: round(x, -2))
 
+    # Ensure all expected flyways are represented in the columns, even if no data exists for them
+    all_flyways = ['Atlantic Flyway', 'Mississippi Flyway', 'Pacific Flyway', 'Central Flyway', 'Alaska']
+    for flyway in all_flyways:
+        if flyway not in pivot_df.columns:
+            pivot_df[flyway] = 0
 
+    # Reorder columns to ensure consistent order, regardless of the data present
+    pivot_df = pivot_df[all_flyways]
+
+    #Ensure 'Season' is a column
+    pivot_df.reset_index(inplace=True)
+
+    return pivot_df
+    
 def aggregate_harvest_by_species_by_flyway(df, flyway, season_start, season_end, species_or_group, selected_species_colname):
-    ''' Sums the harvest by species or group and by flyway and by state. '''
+    ''' Sums the harvest by species or group and by state for given flyway. '''
+
+    ALL_FLYWAYS = ['Atlantic Flyway', 'Mississippi Flyway', 'Pacific Flyway', 'Central Flyway', 'Alaska']
 
     flyway_df = df[
-        (df['flyway_name'] == flyway) &
+        (df['flyway_name'].isin(ALL_FLYWAYS)) &
         (df['Season'] >= season_start) &
         (df['Season'] <= season_end)
     ]
@@ -133,14 +153,22 @@ def aggregate_harvest_by_species_by_flyway(df, flyway, season_start, season_end,
     else:
         flyway_df = flyway_df[flyway_df[selected_species_colname] == species_or_group]
 
-    # Round the harvest_weight to the nearest hundred
-    flyway_df['harvest_weight'] = np.round(flyway_df['harvest_weight'], -2)
+    #create pivot table
+    flyway_pivot = flyway_df.pivot_table(
+        values='harvest_weight',
+        index='Season',
+        columns='state',
+        aggfunc='sum',
+       fill_value=0,
+      dropna=True
+    ).astype(int)
 
-    # Aggregate and pivot the data
-    flyway_totals = flyway_df.groupby(['Season', 'state'])['harvest_weight'].sum().reset_index()
-    flyway_pivot = flyway_totals.pivot(index='Season', columns='state', values='harvest_weight').fillna(0)
-    # Ensure 'harvest_year' is a column
+    # Round to the nearest hundred
+    flyway_pivot = flyway_pivot.applymap(lambda x: round(x, -2))
+  
+    # Ensure 'Season' is a column
     flyway_pivot.reset_index(inplace=True)
+
     return flyway_pivot
 
 
@@ -148,28 +176,40 @@ def calc_harvest_tabledata_by_species(df, flyway, season_start, season_end, spec
     ''' Calculates the complete harvest table data by species. '''
 
     total_species_data = aggregate_harvest_by_species_by_flyway(df, flyway, season_start, season_end, species_or_group, selected_species_colname)
+    
+    flyway_data = aggregate_harvest_by_flyway(df, season_start, season_end, species_or_group, selected_species_colname)
+    
+    # Ensure that both DataFrames are indexed by 'Season'
+    if 'Season' not in total_species_data.columns:
+        total_species_data.set_index('Season', inplace=True)
+    if 'Season' not in flyway_data.columns:
+        flyway_data.set_index('Season', inplace=True)
+
+    # Merge the flyway data into the total_species_data DataFrame
+    total_species_data = total_species_data.merge(flyway_data, on='Season', how='left')
+    
+    # Fill any missing values which might be caused by left join
+    total_species_data.fillna(0, inplace=True)
 
     # Flyways including Alaska
     ALL_FLYWAYS = ['Atlantic Flyway', 'Mississippi Flyway', 'Pacific Flyway', 'Central Flyway', 'Alaska']
 
-    # Compute totals for each flyway and sum for US total
-    flyway_totals = {flyway: aggregate_harvest_by_flyway(df, flyway, season_start, season_end, species_or_group, selected_species_colname) for flyway in ALL_FLYWAYS}
-    us_totals = pd.concat(flyway_totals.values(), axis=1).fillna(0).sum(axis=1).astype(int)
+    for column in ALL_FLYWAYS:
+        if column not in total_species_data.columns:
+            total_species_data[column] = 0
+
+    # Sum the flyway columns to create a new 'US' column
+    total_species_data['US'] = total_species_data[ALL_FLYWAYS].sum(axis=1)
+
+    #total_species_data['US'] = pd.concat(total_species_data[ALL_FLYWAYS], axis=1).sum(axis=1).astype(int)
 
     print_info("Calculating flyway sum data for species: "+species_or_group)
-    # Merge the totals with the main total_species_data 
-    total_species_data = join_np_arrays(total_species_data, flyway_totals['Atlantic Flyway'], 'AF')
-    total_species_data = join_np_arrays(total_species_data, flyway_totals['Mississippi Flyway'], 'MF')
-    total_species_data = join_np_arrays(total_species_data, flyway_totals['Pacific Flyway'], 'PF')
-    total_species_data = join_np_arrays(total_species_data, flyway_totals['Central Flyway'], 'CF')
-    total_species_data = join_np_arrays(total_species_data, flyway_totals['Alaska'], 'AK')
-    total_species_data = join_np_arrays(total_species_data, us_totals, 'US')
-   
 
     print_info("Calculating time period averages data for species: "+species_or_group)
+
     # Calculate time period averages
     time_period_averages = calc_time_period_averages(total_species_data, season_start, season_end)
-
+       
     # Returning both the species totals and time period averages data
     return (total_species_data, time_period_averages)
 
@@ -213,7 +253,7 @@ def find_next_year_ending_in_0_or_5(year):
     return year
 
 def calc_time_period_averages(species_pivot, first_year, last_year):
-    ''' Caclulate time periods and their averages for data table. '''
+    ''' Calculate time periods and their averages for data table. '''
     # Calculate the first period's end year to end with 0 or 5
     first_period_end_year = find_next_year_ending_in_0_or_5(first_year)
 
@@ -234,30 +274,30 @@ def calc_time_period_averages(species_pivot, first_year, last_year):
         time_periods[period_label] = (start_year, end_year)
         start_year = end_year + 1
 
-    # Fill missing values with 0 and convert to int
-    species_pivot.fillna(0, inplace=True)
-    species_pivot = species_pivot.astype(int)
-
-    # Sort the data by year first (numeric only)
-    species_pivot['Season'] = species_pivot['Season'].astype(str)
-    numeric_years = species_pivot[species_pivot['Season'].str.isnumeric()]
-    numeric_years['Season'] = numeric_years['Season'].astype(int)
-    numeric_years.sort_values(by='Season', inplace=True)
-
     # Calculate averages for each time period and create a DataFrame for them
     averages_rows = []
     for label, (start_year, end_year) in time_periods.items():
         # Select the data for the time period
-        period_data = numeric_years[(numeric_years['Season'] >= start_year) & (numeric_years['Season'] <= end_year)]
+        if 'Season' in species_pivot.columns:
+            period_data = species_pivot[(species_pivot['Season'] >= start_year) & (species_pivot['Season'] <= end_year)]
+        else:
+            print("Season column is missing.")
 
+        #period_data = species_pivot.loc[start_year:end_year]
+             
         # Calculate the mean for each column
-        averages = period_data.mean().round(0)  # Round to 0 decimal places
-        averages['Season'] = label  # Set the label for the averages row
-        averages_rows.append(averages)
+        averages = period_data.mean().fillna(0).round(0).astype(int)
+        averages_df = averages.to_frame().T
+        averages_df.index = [label]  # Set the label for the averages row
+        averages_rows.append(averages_df)
+        
+    # Concatenate the averages rows into a single DataFrame
+    final_averages_df = pd.concat(averages_rows)
+    #final_averages_df.set_index('Season', inplace=True)
 
-    # Convert the averages list of series to a DataFrame
-    averages_df = pd.DataFrame(averages_rows)
-    return averages_df
+    final_averages_df['Season'] = final_averages_df.index
+
+    return final_averages_df
 
 
 ''' ########### FUNCTIONS: Excel Table Generation ########### '''
@@ -280,7 +320,6 @@ def generate_excel_workbook_for_multiple_species(table_data_results_list):
         
 
         table_title = 'Estimates of '+species_name+' Harvest in the '+flyway
-        species_name = species_name.replace('/',' ')
         FlywayTables.create_table_to_ws(wb, harvest_estimate_data, period_averages, asterisk_text_list, table_title, species_name)
             
         workbook_name = flyway+' Tables.xlsx'
@@ -309,7 +348,7 @@ def print_fatal_exit(output_str):
 @click.command()
 @click.argument('filename', required=1, type=click.Path(exists=True))
 @click.option('--flyway', default='Atlantic Flyway', help='Name of the flyway. Options are Atlantic Flyway, Mississipi Flyway, \
-                Central Flyway, Pacific Flyway. Default is "Atlatnic Flyway".')
+                Central Flyway, Pacific Flyway. Default is "Atlantic Flyway".')
 @click.option('--seasons', default='all', help='Season range to generate. Use the notation <START>:<END>. E.g. 1999:2021. Default is ALL.')
 @click.option('--species_name', default='all', help='A comma seperated list of species or grouping of species to generate tables. \
               Multiple species can be combined together into a named group using the notation \
@@ -347,8 +386,6 @@ def main(flyway, seasons, species_name, species_aou, filename):
         all_seasons.sort()
         seasons = (int(all_seasons[0]), int(all_seasons[-1]))
 
-    
-
     selected_species_groups_n_species = None
     selected_species_colname = None
     selected_species_list = []
@@ -374,16 +411,14 @@ def main(flyway, seasons, species_name, species_aou, filename):
     # Cleaning: update 'species_aou' and 'species_name' where 'aou_number' equals 1722
     sdf.loc[sdf['AOU_number'] == 1722, ['species_aou', 'species_name']] = 'MCGO', 'Minima Cackling Goose'
 
-    
-
     # Printing parsed input options
-    print_info('Processed input parameters:')
-    print_info('--Seasons='+str(seasons))
-    print_info('--Flyway='+flyway)
-    print_info('--Selected Species='+str(selected_species_list))
-    print_info('--Selected Species Column='+str(selected_species_colname))
+    print_info('Parsed Input Options:')
+    print_info('Seasons='+str(seasons))
+    print_info('Flyway='+flyway)
+    print_info('Selected Species='+str(selected_species_list))
+    print_info('Selected Species Column='+str(selected_species_colname))
 
-    big_results = calc_harvest_tabledata_multiple_species(sdf, flyway, seasons[0], seasons[1], selected_species_list,  selected_species_colname)
+    big_results = calc_harvest_tabledata_multiple_species(sdf, flyway, seasons[0], seasons[1], selected_species_list, selected_species_colname)
 
     # Genernating Excel workbook tables from all results.
     generate_excel_workbook_for_multiple_species(big_results)
