@@ -411,6 +411,9 @@ def main(flyway, seasons, species_name, species_aou, filename):
     # Cleaning: update 'species_aou' and 'species_name' where 'aou_number' equals 1722
     sdf.loc[sdf['AOU_number'] == 1722, ['species_aou', 'species_name']] = 'MCGO', 'Minima Cackling Goose'
 
+    # Replace any punctuation in 'species_name' with '_'
+    sdf['species_name'] = sdf['species_name'].str.replace(r'[^\w\s]', '_', regex=True)
+
     # Printing parsed input options
     print_info('Parsed Input Options:')
     print_info('Seasons='+str(seasons))
